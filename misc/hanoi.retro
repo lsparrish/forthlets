@@ -1,0 +1,48 @@
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Solve "Towers of Hanoi" Puzzle using recursion            )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Distributed under the Creative Commons Zero License:      )
+(                                                           )
+( The person who associated a work with this document has   )
+( dedicated this work to the Commons by waiving all of his  )
+( or her rights to the work under copyright law and all     )
+( related or neighboring legal rights he or she had in the  )
+( work, to the extent allowable by law.                     )
+(                                                           )
+( Other Rights — In no way are any of the following rights  )
+( affected by CC0:                                          )
+(  * Patent or trademark rights held by the person who      )
+(    associated this document with a work.                  )
+(  * Rights other persons may have either in the work       )
+(    itself or in how the work is used, such as publicity   )
+(    or privacy rights.                                     )
+(                                                           )
+( Charles Childers, July 2009                               )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+
+{{
+  variable state
+  : end? last @ d->name s" |" compare ;
+  : cleanup last @ heap ! last @ @ last ! ;
+  : (value) state @ 0 =if @ ;then ! state off ;
+  : .value compiler @ -1 =if literal, ['] (value) compile ;then (value) ;
+---reveal---
+  : to state on ;
+  : value create 0 , ['] .value last @ d->class ! ;
+  : value| repeat value end? if cleanup ;then again ;
+}}
+
+
+value| sa sb sc n |
+: vars to sc to sb to sa to n ;
+
+: hanoi ( num from to via -- )
+  vars
+  n 0 !if
+    n sa sb sc
+    n 1- sa sc sb hanoi
+    vars
+    cr ." Move a ring from " sa . ." to " sb .
+    n 1- sc sb sa hanoi
+  then
+;
