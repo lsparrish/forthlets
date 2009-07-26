@@ -1,0 +1,49 @@
+Forthlets - A Collection of Small Programs written in Forth
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This is a collection of small programs I've written in Forth.
+
+They are all open source, and are intended to be used with
+Retro. They will likely not work without major hacking on any
+other Forth dialect.
+
+You will need an extended Retro image, including the full set
+of standard words, and the canvas library. With recent source
+snapshots of Retro:
+
+  make vm
+  cd bin/library
+  extend --new
+  extend --with os-specific/canvas.retro
+
+Or, go to http://retroforth.org/binaries/Images and get the
+latest image file from there.
+
+You can then load these using:
+
+  retro --with path/to/filename
+
+For the canvas demos, you'll need to shrink and convert the
+images to javascript format:
+
+  retro10/tools/shrinkImage
+  retro10/tools/image2any javascript >retroImage.js
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Legal Stuff:
+
+This code is distributed under the Creative Commons Zero
+License. Read on for details.
+
+The person who associated a work with this document has
+dedicated this work to the Commons by waiving all of his
+or her rights to the work under copyright law and all
+related or neighboring legal rights he or she had in the
+work, to the extent allowable by law.
+
+Other Rights — In no way are any of the following rights
+affected by CC0:
+ * Patent or trademark rights held by the person who
+   associated this document with a work.
+ * Rights other persons may have either in the work
+   itself or in how the work is used, such as publicity
+   or privacy rights.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
