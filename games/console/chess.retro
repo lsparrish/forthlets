@@ -1,0 +1,70 @@
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( This is a port of my old chess game to the latest version )
+( of Retro. It has some differences in display and provided )
+( commands, but gameplay is very close to the original. And )
+( the code is somewhat cleaner.                             )
+(                                                           )
+( To start:                                                 )
+(   play-chess                                              )
+(                                                           )
+( To quit:                                                  )
+(   quit                                                    )
+(                                                           )
+( Start a new game:                                         )
+(   new                                                     )
+(                                                           )
+( Make a move:                                              )
+(   move row,column row,column                              )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Distributed under the Creative Commons Zero License:      )
+(                                                           )
+( The person who associated a work with this document has   )
+( dedicated this work to the Commons by waiving all of his  )
+( or her rights to the work under copyright law and all     )
+( related or neighboring legal rights he or she had in the  )
+( work, to the extent allowable by law.                     )
+(                                                           )
+( Other Rights — In no way are any of the following rights  )
+( affected by CC0:                                          )
+(  * Patent or trademark rights held by the person who      )
+(    associated this document with a work.                  )
+(  * Rights other persons may have either in the work       )
+(    itself or in how the work is used, such as publicity   )
+(    or privacy rights.                                     )
+(                                                           )
+( Charles Childers, July 2009                               )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+
+
+{{
+ create blank
+ 114 , 110 , 98 , 113 , 107 , 98 , 110 , 114 ,
+ 112 , 112 , 112 , 112 , 112 , 112 , 112 , 112 ,
+ 46 , 46 , 46 , 46 , 46 , 46 , 46 , 46 ,
+ 46 , 46 , 46 , 46 , 46 , 46 , 46 , 46 ,
+ 46 , 46 , 46 , 46 , 46 , 46 , 46 , 46 ,
+ 46 , 46 , 46 , 46 , 46 , 46 , 46 , 46 ,
+ 80 , 80 , 80 , 80 , 80 , 80 , 80 , 80 ,
+ 82 , 78 , 66 , 81 , 75 , 66 , 78 , 82 ,
+
+ create board 64 allot
+ variable line
+
+ : r,c 44 ( , ) accept tib >number 32 accept tib >number swap ;
+ : pos r,c 8 * board + + ;
+ : later pop pop swap push push ;
+ : reset 0 line ! ;
+ : .line line @ dup 1+ line ! . ;
+ : #|...| .line 124 emit 32 emit later 124 emit cr ;
+ : ### ."     0 1 2 3 4 5 6 7" cr ;
+ : --- ."   -------------------" cr ;
+ : row #|...| 8 for dup @ emit 32 emit 1+ next ;
+ : show 8 for row next drop reset ;
+ : display clear ### --- board show --- ;
+
+---reveal---
+ : new blank board 64 copy ;
+ : move pos dup @ push 46 ( . ) swap ! pop pos ! ;
+ : play-chess ['] display ['] ok :is new ;
+ : quit ['] ok :devector ;
+}}

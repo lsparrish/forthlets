@@ -1,0 +1,109 @@
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Tic-Tac-Toe                                               )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Distributed under the Creative Commons Zero License:      )
+(                                                           )
+( The person who associated a work with this document has   )
+( dedicated this work to the Commons by waiving all of his  )
+( or her rights to the work under copyright law and all     )
+( related or neighboring legal rights he or she had in the  )
+( work, to the extent allowable by law.                     )
+(                                                           )
+( Other Rights — In no way are any of the following rights  )
+( affected by CC0:                                          )
+(  * Patent or trademark rights held by the person who      )
+(    associated this document with a work.                  )
+(  * Rights other persons may have either in the work       )
+(    itself or in how the work is used, such as publicity   )
+(    or privacy rights.                                     )
+(                                                           )
+( Charles Childers, July 2009                               )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+
+( Helper Words )
+: toggle dup @ not swap ! ;
+: []  ( index baseaddr -- value ) + @ ;
+: []! ( value index baseaddr -- ) + ! ;
+: []^ ( index baseaddr -- addr ) + ;
+compiler: ` ( "- ) ' literal, which @ d->class @ compile ;
+: within ( xul-f ) push over pop <if >if -1 ;; then  0 ;; then 2drop 0 ;
+compiler: region: ( "- )
+   ` within -1 literal, ` =if ` drop ' compile ` ;; ` then ;
+
+
+( Data Structures )
+create color 0 ,     ( Color flag )
+create pos 0 , 0 ,   ( Last click position [x/y pair] )
+
+
+( Mouse location checks )
+: update mouse 0 pos []! 1 pos []! ;
+: moved? mouse 0 pos [] =if 1 pos [] =if 0 ;; then -1 ;; then drop -1 ;
+
+
+( Choose the color for the current user and switch for the next turn )
+: (which) color @ -1 =if red ;; then blue ;
+: player (which) color toggle ;
+
+
+( Draw the playing field )
+: board
+  0 0 800 400 white solidBox
+    0  50 150 black hline
+    0 100 150 black hline
+   50   0 150 black vline
+  100   0 150 black vline
+;
+
+
+( Handle left column )
+: lt 5 5 40 40 player solidBox ;
+: lm 5 55 40 40 player solidBox ;
+: lb 5 105 40 40 player solidBox ;
+: left
+  dup   0  50 region: lt
+  dup  50 100 region: lm
+  dup 100 150 region: lb
+  drop
+;
+
+( Handle middle column )
+: mt 55 5 40 40 player solidBox ;
+: mm 55 55 40 40 player solidBox ;
+: mb 55 105 40 40 player solidBox ;
+: middle
+  dup   0  50 region: mt
+  dup  50 100 region: mm
+  dup 100 150 region: mb
+  drop
+;
+
+( Handle right column )
+: rt 105 5 40 40 player solidBox ;
+: rm 105 55 40 40 player solidBox ;
+: rb 105 105 40 40 player solidBox ;
+: right
+  dup   0  50 region: rt
+  dup  50 100 region: rm
+  dup 100 150 region: rb
+  drop
+;
+
+
+( Handle user interaction )
+: process
+  moved? 0; drop
+  click? 0; drop
+  update
+  mouse swap
+  dup   0  50 region: left
+  dup  50 100 region: middle
+  dup 100 150 region: right
+  2drop
+;
+
+
+( Main application loop )
+: play clear board repeat process again ;
+' play is boot
+save bye
