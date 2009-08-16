@@ -1,0 +1,138 @@
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Simple ASCII Maze                                         )
+(                                                           )
+( Features:                                                 )
+(  - ASCII graphics                                         )
+(  - 16x16 map                                              )
+(  - Collision Detection w/map items                        )
+(  - Move using the arrow keys                              )
+(                                                           )
+( This version has only been tested under OS X and may need )
+( changes to the key handlers to work on other OSes.        )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Distributed under the Creative Commons Zero License:      )
+(                                                           )
+( The person who associated a work with this document has   )
+( dedicated this work to the Commons by waiving all of his  )
+( or her rights to the work under copyright law and all     )
+( related or neighboring legal rights he or she had in the  )
+( work, to the extent allowable by law.                     )
+(                                                           )
+( Other Rights — In no way are any of the following rights  )
+( affected by CC0:                                          )
+(  * Patent or trademark rights held by the person who      )
+(    associated this document with a work.                  )
+(  * Rights other persons may have either in the work       )
+(    itself or in how the work is used, such as publicity   )
+(    or privacy rights.                                     )
+(                                                           )
+( Charles Childers, July 2009                               )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+
+: ROWS 16 ;
+: COLUMNS 16 ;
+
+variable lx
+variable ly
+variable lc
+variable ox
+variable oy
+
+: $, dup getLength for dup @ , 1+ next drop ;
+
+create board
+" A # #  ####### #" $,
+" # ## # #   #   #" $,
+" #              #" $,
+" # #### ###  # # " $,
+" # #  # #   #  # " $,
+" ###    # #  #   " $,
+" #   ## # # #  # " $,
+" # # ###### ## # " $,
+" # #   ###  # #  " $,
+" # # # # # # ## #" $,
+" # # #     ## # #" $,
+" # # ######   # #" $,
+" #          # # #" $,
+" ############ # #" $,
+" #              #" $,
+" Z ##############" $,
+
+
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Display the game map                                      )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+: row ." | " COLUMNS for 2dup + @ emit 32 emit 1+ next ." | " cr ;
+: display
+  clear
+  32 emit 33 for ." -" next cr
+  board 0 ROWS for row next 2drop
+  32 emit 33 for ." -" next cr
+  ." Player at: " lx @ . ly @ . cr
+;
+
+
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Check for attempts to move out of bounds and correct them )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+: bounds
+  lx @ 0 <if 0 lx ! then
+  lx @ COLUMNS 1- >if COLUMNS 1- lx ! then
+  ly @ 0 <if 0 ly ! then
+  ly @ ROWS 1- >if ROWS 1- ly ! then
+;
+
+
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Code to move the player character around the map          )
+( This is the backend stuff and shouldn't be necessary for  )
+( raw use.                                                  )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+: pos 16 * board + + ;
+: update lx @ ox ! ly @ oy ! ;
+: get lx @ ly @ pos @ lc ! ;
+: rst lc @ lx @ ly @ pos ! ;
+: put bounds get 64 lx @ ly @ pos ! ;
+
+
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Some input-related bits                                   )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+variable k
+: kx key k ! ;
+
+
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Handle Collisions w/map objects                           )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+: undo-move
+  ox @ lx !
+  oy @ ly !
+;
+
+: wall? lx @ ly @ pos @ 35 =if undo-move then ;
+: end? lx @ ly @ pos @ 90 =if put update display ." You win!" cr bye then ;
+
+
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Handle various keys                                       )
+( For arrow keys:                                           )
+(   OS X returns three values: 27 91 key, we use isArrow?   )
+(   to eat the first two and then deal with the last one.   )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+: up?      k @  65 =if rst 1 ly -! then ;
+: down?    k @  66 =if rst 1 ly +! then ;
+: left?    k @  67 =if rst 1 lx +! then ;
+: right?   k @  68 =if rst 1 lx -! then ;
+: isArrow? k @  27 =if kx kx up? down? left? right? then ;
+: quit?    k @ 113 =if bye then ;
+
+: get-input kx isArrow? quit? ;
+
+
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Main Game Loop                                            )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+: play get 0 0 put repeat display get-input wall? end? put update again ;
+' play is boot
+save bye
