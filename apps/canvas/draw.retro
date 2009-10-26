@@ -53,9 +53,7 @@ create colors
   pop drop drop 0
 ;
 
-compiler: `  ( "- )  ' literal, which @ d->class @ compile ;
-
-compiler: region: ( "- )
+macro: region: ( "- )
    ` region -1 literal, ` =if ` drop ' compile 0 literal, ` ;; ` then ;
 
 : check ( -f )
