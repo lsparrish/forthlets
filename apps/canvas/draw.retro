@@ -53,8 +53,9 @@ create colors
   pop drop drop 0
 ;
 
-macro: region: ( "- )
+: region: ( "- )
    ` region -1 literal, ` =if ` drop ' compile 0 literal, ` ;; ` then ;
+immediate
 
 : check ( -f )
   mouse 350 >if
