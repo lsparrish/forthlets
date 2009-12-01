@@ -39,7 +39,7 @@
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
 ( Some useful support functions                             )
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
-macro: ~ 32 accept tib @ .data ;
+: ~ 32 accept tib @ .data ; immediate
 : $, dup getLength 0 swap for 2dup + @ , 1+ next 2drop 0 , ;
 
 
@@ -66,7 +66,7 @@ variable neighbors
   world 19 + @ ~ # =if 1 neighbors ! ;then 0 neighbors !
 ;
 : flip ( n-n )
-  dup world + @ ~ # =if ~ . ;then ~ # ;
+  dup world + @ ~ # =if ~ . ;then ~ #
 ;
 
 : check ( n-n )
