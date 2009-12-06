@@ -1,0 +1,17 @@
+: min 2dup <if drop ;then nip ;
+here ]   dup . ." bottles" ;
+here ]       ." 1 bottle"  ;
+here ] ." no more bottles" ;
+create bottles , , ,
+
+: .bottles  dup 2 min bottles + @ execute ;
+: .beer     .bottles ."  of beer" ;
+: .wall     .beer ."  on the wall" ;
+: .take     ." Take one down, pass it around" ;
+: .verse    .wall cr .beer cr
+            1- .take cr .wall cr ;
+: ?dup      dup 0; ;
+: verses    repeat cr .verse ?dup 0 = not 0; drop again ;
+
+99 verses
+bye

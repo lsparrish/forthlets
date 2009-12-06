@@ -1,0 +1,4 @@
+: squared ( n-n  ) dup * ;
+: [doors] ( n-nn ) 1 repeat 2dup squared > 0; drop dup squared . 1+ again ;
+: doors   ( n-   ) [doors] 2drop ;
+100 doors
