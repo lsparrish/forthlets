@@ -23,6 +23,7 @@
 stub rem
 
 {
+  stub v      ( view   )
   variable l  ( line   )
   variable c  ( column )
 
@@ -32,7 +33,7 @@ stub rem
     : va   ( a-va) dup @ swap ;
     : c!   ( a-)   char: * swap ! ;
     : show ( va- ) dup c! (v) ! ;
-    here is v ] pos get va show ;
+    here is v ] ( - ) pos get va show ;
   }
 
 
