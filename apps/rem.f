@@ -23,34 +23,41 @@
 stub rem
 
 {
-variable l  ( line   )
-variable c  ( column )
+  variable l  ( line   )
+  variable c  ( column )
 
-{
-: pos  ( -cl)  c @ l @ ;
-: get  ( cl-a) (line) + ;
-: va   ( a-va) dup @ swap ;
-: c!   ( a-)   char: * swap ! ;
-: show ( va- ) dup c! (v) ! ;
-here is v ] pos get va show ;
-}
+  {
+    : pos  ( -cl)  c @ l @ ;
+    : get  ( cl-a) (line) + ;
+    : va   ( a-va) dup @ swap ;
+    : c!   ( a-)   char: * swap ! ;
+    : show ( va- ) dup c! (v) ! ;
+    here is v ] pos get va show ;
+  }
 
 
-: match: ` char: ` over ` =if ; immediate
+  : match: ` char: ` over ` =if ; immediate
+  : bounds ( - )
+    c @ -1 =if 63 c ! l -- then
+    c @ 64 =if  0 c ! then
+    l @ -1 =if  0 l ! p then
+    l @  8 =if  0 l ! n then
+    blk @ -1 =if 0 s then
+  ;
 
-here is rem ]
-  repeat
-    v cr l @ . c @ .
-    key
-    match: i  l --        then
-    match: j  c --        then
-    match: k  l ++        then
-    match: l  c ++        then
-    match: p  p           then
-    match: n  n           then
-    match: q  c @ l @ ia  then
-    match: z  drop       ;then
-    drop
-  again
-;
+  here is rem ]
+    repeat
+      v cr l @ . c @ .
+      key
+      match: i  l -- bounds then
+      match: j  c -- bounds then
+      match: k  l ++ bounds then
+      match: l  c ++ bounds then
+      match: p  p           then
+      match: n  n           then
+      match: q  c @ l @ ia  then
+      match: z  drop       ;then
+      drop
+    again
+  ;
 }
