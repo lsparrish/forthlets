@@ -40,7 +40,7 @@ stub rem
   : match: ` char: ` over ` =if ; immediate
   : bounds ( - )
     c @ -1 =if 63 c ! l -- then
-    c @ 64 =if  0 c ! then
+    c @ 64 =if  0 c ! l ++ then
     l @ -1 =if  0 l ! p then
     l @  8 =if  0 l ! n then
     blk @ -1 =if 0 s then
