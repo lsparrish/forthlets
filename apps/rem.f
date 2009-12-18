@@ -26,6 +26,16 @@ stub rem
 variable l  ( line   )
 variable c  ( column )
 
+{
+: pos  ( -cl)  c @ l @ ;
+: get  ( cl-a) (line) + ;
+: va   ( a-va) dup @ swap ;
+: c!   ( a-)   char: * swap ! ;
+: show ( va- ) dup c! (v) ! ;
+here is v ] pos get va show ;
+}
+
+
 : match: ` char: ` over ` =if ; immediate
 
 here is rem ]
