@@ -38,11 +38,12 @@ stub rem
   : lt ( - ) c -- ;
   : rt ( - ) c ++ ;
 
+  : match-num ( n- )
+    ` over ` =if ; immediate
   : match: ( "- )
-    ` char: ` over ` =if ; immediate
-
-  : esc-q ( n-n )
-    dup 27 =if drop char: q then ;
+    ` char: ` match-num ; immediate
+  : alias-num: ( n"- )
+    ` match-num ` char: ; immediate
 
   : bounds ( - )
     c @ -1 =if 63 c ! up then
@@ -73,7 +74,7 @@ stub rem
   here is rem ]
     repeat
       r key
-      esc-q
+      27 alias-num: q  then
       match: i  up     then
       match: j  lt     then
       match: k  dn     then
