@@ -23,6 +23,7 @@
 stub rem
 
 {
+  stub q      ( input  )
   stub p      ( prev   )
   stub n      ( next   )
   stub v      ( view   )
@@ -35,10 +36,16 @@ stub rem
   {
     : pos  ( -cl)  c @ l @ ;
     : get  ( cl-a) (line) + ;
+    : addr ( -a )  pos get ;
     : va   ( a-va) dup @ swap ;
     : c!   ( a-)   char: * swap ! ;
     : show ( va- ) dup c! (v) ! ;
-    here is v ] ( - ) pos get va show ;
+    here is v ] ( - ) addr va show ;
+    here is q ] ( n-n ) 
+      key
+      dup 27 =if ;then
+      dup 10 =if ;then
+      addr ! c ++ v q ;
   }
 
   : match: ` char: ` over ` =if ; immediate
@@ -60,7 +67,7 @@ stub rem
       match: l  c ++ bounds then
       match: p  p    bounds then
       match: n  n    bounds then
-      match: q  c @ l @ ia  then
+      match: q  q           then
       match: z  drop       ;then
       drop
     again
