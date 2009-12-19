@@ -42,6 +42,8 @@ stub rem
   : bot ( - ) 7 l ! ;
   : beg ( - ) 0 c ! ;
   : end ( - ) 63 c ! ;
+  : cen ( - ) 31 c ! ;
+  : mid ( - ) 3 l ! ;
 
   : match-num ( n- )
     ` over ` =if ; immediate
@@ -87,10 +89,11 @@ stub rem
       match: k  dn     then
       match: l  rt     then
       match: I  top    then
+      match: m  cen    then
       match: J  beg    then
       match: K  bot    then
       match: L  end    then
-
+      match: M  mid    then
       match: p  p      then
       match: n  n      then
       match: q  q      then
