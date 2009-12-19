@@ -61,8 +61,8 @@ stub rem
     here is v ] ( - ) addr va show ;
     here is q ] ( n-n )
       key
-      dup 27 =if ;then
-      dup 8  =if lt 32 wr r q ;then
+      dup 27 =if drop ;then
+      dup 8  =if drop lt 32 wr r q ;then
       wr rt r q ;
   }
 
