@@ -65,10 +65,12 @@ stub rem
     here is r ] v cr pos . . ;
     here is v ] ( - ) addr va show ;
     here is q ] ( n-n )
-      key
-      dup 27 =if drop ;then
-      dup 8  =if drop lt 32 wr r q ;then
-      wr rt r q ;
+      repeat
+        key
+        dup 27 =if drop ;then
+        dup 8  =if drop lt 32 wr r q ;then
+        wr rt r
+      again ;
   }
 
   here is rem ]
