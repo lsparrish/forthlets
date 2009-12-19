@@ -23,13 +23,13 @@
 stub rem
 
 {
-  stub r      ( refresh)
-  stub q      ( input  )
-  stub p      ( prev   )
-  stub n      ( next   )
-  stub v      ( view   )
-  variable l  ( line   )
-  variable c  ( column )
+  stub r      ( refresh )
+  stub q      ( input   )
+  stub p      ( prev    )
+  stub n      ( next    )
+  stub v      ( view    )
+  variable l  ( line    )
+  variable c  ( column  )
 
   here is p ] blk -- ;
   here is n ] blk ++ ;
@@ -56,7 +56,7 @@ stub rem
     : wr   ( n- ) bounds addr ! ;
     here is r ] v cr pos . . ;
     here is v ] ( - ) addr va show ;
-    here is q ] ( n-n ) 
+    here is q ] ( n-n )
       key
       dup 27 =if ;then
       dup 10 =if ;then
@@ -67,14 +67,14 @@ stub rem
   here is rem ]
     repeat
       r key
-      match: i  up          then
-      match: j  lt          then
-      match: k  dn          then
-      match: l  rt          then
-      match: p  p           then
-      match: n  n           then
-      match: q  q           then
-      match: z  drop       ;then
+      match: i  up     then
+      match: j  lt     then
+      match: k  dn     then
+      match: l  rt     then
+      match: p  p      then
+      match: n  n      then
+      match: q  q      then
+      match: z  drop  ;then
       bounds
       drop
     again
