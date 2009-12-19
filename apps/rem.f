@@ -38,6 +38,11 @@ stub rem
   : lt ( - ) c -- ;
   : rt ( - ) c ++ ;
 
+  : top ( - ) 0 l ! ;
+  : bot ( - ) 7 l ! ;
+  : beg ( - ) 0 c ! ;
+  : end ( - ) 63 c ! ;
+
   : match-num ( n- )
     ` over ` =if ; immediate
   : match: ( "- )
@@ -46,10 +51,10 @@ stub rem
     ` match-num ` char: ; immediate
 
   : bounds ( - )
-    c @ -1 =if 63 c ! up then
-    c @ 64 =if  0 c ! dn then
-    l @ -1 =if  0 l ! p then
-    l @  8 =if  0 l ! n then
+    c @ -1 =if end up then
+    c @ 64 =if beg dn then
+    l @ -1 =if top p then
+    l @  8 =if bot n then
     blk @ -1 =if 0 s then
     blk @ #-blocks @ >if blk -- then
   ;
