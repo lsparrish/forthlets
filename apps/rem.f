@@ -86,6 +86,11 @@ stub rem
       match: j  lt     then
       match: k  dn     then
       match: l  rt     then
+      match: I  top    then
+      match: J  beg    then
+      match: K  bot    then
+      match: L  end    then
+
       match: p  p      then
       match: n  n      then
       match: q  q      then
