@@ -42,24 +42,28 @@ stub rem
   }
 
   : match: ` char: ` over ` =if ; immediate
-  : bounds ( - )
+  : adjust ( - )
     c @ -1 =if 63 c ! l -- then
     c @ 64 =if  0 c ! l ++ then
     l @ -1 =if  0 l ! p then
     l @  8 =if  0 l ! n then
+  ;
+
+  : range ( - )
     blk @ -1 =if 0 s then
+    blk @ #-blocks @ >if blk -- then
   ;
 
   here is rem ]
     repeat
       v cr l @ . c @ .
       key
-      match: i  l -- bounds then
-      match: j  c -- bounds then
-      match: k  l ++ bounds then
-      match: l  c ++ bounds then
-      match: p  p    bounds then
-      match: n  n    bounds then
+      match: i  l -- adjust then
+      match: j  c -- adjust then
+      match: k  l ++ adjust then
+      match: l  c ++ adjust then
+      match: p  p    range  then
+      match: n  n    range  then
       match: q  c @ l @ ia  then
       match: z  drop       ;then
       drop
