@@ -23,9 +23,14 @@
 stub rem
 
 {
+  stub p      ( prev   )
+  stub n      ( next   )
   stub v      ( view   )
   variable l  ( line   )
   variable c  ( column )
+
+  here is p ] blk -- ;
+  here is n ] blk ++ ;
 
   {
     : pos  ( -cl)  c @ l @ ;
@@ -35,7 +40,6 @@ stub rem
     : show ( va- ) dup c! (v) ! ;
     here is v ] ( - ) pos get va show ;
   }
-
 
   : match: ` char: ` over ` =if ; immediate
   : bounds ( - )
@@ -54,8 +58,8 @@ stub rem
       match: j  c -- bounds then
       match: k  l ++ bounds then
       match: l  c ++ bounds then
-      match: p  p           then
-      match: n  n           then
+      match: p  p    bounds then
+      match: n  n    bounds then
       match: q  c @ l @ ia  then
       match: z  drop       ;then
       drop
