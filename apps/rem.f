@@ -18,6 +18,7 @@
 (    or privacy rights.                                     )
 (                                                           )
 ( Charles Childers, December 2009                           )
+( Luke Parrish, December 2009                               )
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
 
 stub rem
@@ -40,8 +41,8 @@ stub rem
   : match: ( "- )
     ` char: ` over ` =if ; immediate
   : bounds ( - )
-    c @ -1 =if 63 c ! dn then
-    c @ 64 =if  0 c ! up then
+    c @ -1 =if 63 c ! up then
+    c @ 64 =if  0 c ! dn then
     l @ -1 =if  0 l ! p then
     l @  8 =if  0 l ! n then
     blk @ -1 =if 0 s then
