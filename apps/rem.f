@@ -34,10 +34,13 @@ stub rem
   here is p ] blk -- ;
   here is n ] blk ++ ;
 
+  : up l -- ; : dn l ++ ;
+  : lt c -- ; : rt c ++ ;
+
   : match: ` char: ` over ` =if ; immediate
   : bounds ( - )
-    c @ -1 =if 63 c ! l -- then
-    c @ 64 =if  0 c ! l ++ then
+    c @ -1 =if 63 c ! dn then
+    c @ 64 =if  0 c ! up then
     l @ -1 =if  0 l ! p then
     l @  8 =if  0 l ! n then
     blk @ -1 =if 0 s then
@@ -57,17 +60,17 @@ stub rem
       key
       dup 27 =if ;then
       dup 10 =if ;then
-      dup 8  =if c -- 32 wr r q ;then
-      wr c ++ r q ;
+      dup 8  =if lt 32 wr r q ;then
+      wr rt r q ;
   }
 
   here is rem ]
     repeat
       r key
-      match: i  l --        then
-      match: j  c --        then
-      match: k  l ++        then
-      match: l  c ++        then
+      match: i  up          then
+      match: j  lt          then
+      match: k  dn          then
+      match: l  rt          then
       match: p  p           then
       match: n  n           then
       match: q  q           then
