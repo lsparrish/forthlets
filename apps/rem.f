@@ -40,6 +40,10 @@ stub rem
 
   : match: ( "- )
     ` char: ` over ` =if ; immediate
+
+  : esc-q ( n-n )
+    dup 27 =if drop char: q then ;
+
   : bounds ( - )
     c @ -1 =if 63 c ! up then
     c @ 64 =if  0 c ! dn then
@@ -69,6 +73,7 @@ stub rem
   here is rem ]
     repeat
       r key
+      esc-q
       match: i  up     then
       match: j  lt     then
       match: k  dn     then
