@@ -34,23 +34,6 @@ stub rem
   here is p ] blk -- ;
   here is n ] blk ++ ;
 
-  {
-    : pos  ( -cl)  c @ l @ ;
-    : get  ( cl-a) (line) + ;
-    : addr ( -a )  pos get ;
-    : va   ( a-va) dup @ swap ;
-    : c!   ( a-)   char: * swap ! ;
-    : show ( va- ) dup c! (v) ! ;
-    here is r ] v cr pos . . ;
-    here is v ] ( - ) addr va show ;
-    here is q ] ( n-n ) 
-      key
-      dup 27 =if ;then
-      dup 10 =if ;then
-      dup 8  =if c -- 32 addr ! r q ;then
-      addr ! c ++ r q ;
-  }
-
   : match: ` char: ` over ` =if ; immediate
   : bounds ( - )
     c @ -1 =if 63 c ! l -- then
@@ -60,17 +43,36 @@ stub rem
     blk @ -1 =if 0 s then
   ;
 
+  {
+    : pos  ( -cl)  c @ l @ ;
+    : get  ( cl-a) (line) + ;
+    : addr ( -a )  pos get ;
+    : va   ( a-va) dup @ swap ;
+    : c!   ( a-)   char: * swap ! ;
+    : show ( va- ) dup c! (v) ! ;
+    : wr   ( n- ) bounds addr ! ;
+    here is r ] v cr pos . . ;
+    here is v ] ( - ) addr va show ;
+    here is q ] ( n-n ) 
+      key
+      dup 27 =if ;then
+      dup 10 =if ;then
+      dup 8  =if c -- 32 wr r q ;then
+      wr c ++ r q ;
+  }
+
   here is rem ]
     repeat
       r key
-      match: i  l -- bounds then
-      match: j  c -- bounds then
-      match: k  l ++ bounds then
-      match: l  c ++ bounds then
-      match: p  p    bounds then
-      match: n  n    bounds then
+      match: i  l --        then
+      match: j  c --        then
+      match: k  l ++        then
+      match: l  c ++        then
+      match: p  p           then
+      match: n  n           then
       match: q  q           then
       match: z  drop       ;then
+      bounds
       drop
     again
   ;
