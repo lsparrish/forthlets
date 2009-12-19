@@ -23,6 +23,8 @@
 stub rem
 
 {
+  stub r      ( refresh)
+  stub q      ( input  )
   stub p      ( prev   )
   stub n      ( next   )
   stub v      ( view   )
@@ -32,40 +34,48 @@ stub rem
   here is p ] blk -- ;
   here is n ] blk ++ ;
 
+  : up l -- ; : dn l ++ ;
+  : lt c -- ; : rt c ++ ;
+
+  : match: ` char: ` over ` =if ; immediate
+  : bounds ( - )
+    c @ -1 =if 63 c ! dn then
+    c @ 64 =if  0 c ! up then
+    l @ -1 =if  0 l ! p then
+    l @  8 =if  0 l ! n then
+    blk @ -1 =if 0 s then
+  ;
+
   {
     : pos  ( -cl)  c @ l @ ;
     : get  ( cl-a) (line) + ;
+    : addr ( -a )  pos get ;
     : va   ( a-va) dup @ swap ;
     : c!   ( a-)   char: * swap ! ;
     : show ( va- ) dup c! (v) ! ;
-    here is v ] ( - ) pos get va show ;
+    : wr   ( n- ) bounds addr ! ;
+    here is r ] v cr pos . . ;
+    here is v ] ( - ) addr va show ;
+    here is q ] ( n-n ) 
+      key
+      dup 27 =if ;then
+      dup 10 =if ;then
+      dup 8  =if lt 32 wr r q ;then
+      wr rt r q ;
   }
-
-  : match: ` char: ` over ` =if ; immediate
-  : adjust ( - )
-    c @ -1 =if 63 c ! l -- then
-    c @ 64 =if  0 c ! l ++ then
-    l @ -1 =if  0 l ! p then
-    l @  8 =if  0 l ! n then
-  ;
-
-  : range ( - )
-    blk @ -1 =if 0 s then
-    blk @ #-blocks @ >if blk -- then
-  ;
 
   here is rem ]
     repeat
-      v cr l @ . c @ .
-      key
-      match: i  l -- adjust then
-      match: j  c -- adjust then
-      match: k  l ++ adjust then
-      match: l  c ++ adjust then
-      match: p  p    range  then
-      match: n  n    range  then
-      match: q  c @ l @ ia  then
+      r key
+      match: i  up          then
+      match: j  lt          then
+      match: k  dn          then
+      match: l  rt          then
+      match: p  p           then
+      match: n  n           then
+      match: q  q           then
       match: z  drop       ;then
+      bounds
       drop
     again
   ;
