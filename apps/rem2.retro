@@ -1,0 +1,50 @@
+variable rem:l  ( line   )
+variable rem:c  ( column )
+
+{{
+  ( Display block, with cursor )
+  : pos  ( -cl)  rem:c @ rem:l @ ;
+  : get  ( cl-a) (line) + ;
+  : va   ( a-va) dup @ swap ;
+  : c!   ( a-)   char: * swap ! ;
+  : show ( va- ) dup c! (v) ! ;
+  : display ( - ) pos get va show ;
+
+  ( Bounds checking )
+  : top ( - ) 0 rem:l ! ;
+  : bot ( - ) 7 rem:l ! ;
+  : beg ( - ) 0 rem:c ! ;
+  : end ( - ) 63 rem:c ! ;
+  : mid ( - ) 31 rem:c ! ;
+  : 1st ( - ) 0 blk ! ;
+  : bounds ( - )
+    rem:c @ -1 =if end rem:l -- then
+    rem:c @ 64 =if beg rem:l ++ then
+    rem:l @ -1 =if top p then
+    rem:l @  8 =if bot n then
+    blk @ -1 =if 1st then
+    blk @ #-blocks @ >if blk -- then
+  ;
+
+  : input ( - )
+    repeat
+      key
+      dup 27 <> 0; drop
+      dup  8 =if drop rem:c -- bounds display [ over 8 , , ] then
+      dup 10 =if drop rem:l ++ else pos get ! rem:c ++ then
+      bounds display
+    again
+  ;
+
+  : match ( c-  ) s" $$_" dup push 2 + ! pop find if d->xt @ execute then ;
+  : edit? ( c-c ) dup 27 =if whitespace dup off @ input whitespace ! then ;
+---reveal---
+  : $$i rem:l -- ;             ( i = up    )
+  : $$j rem:c -- ;             ( j = left  )
+  : $$k rem:l ++ ;             ( k = down  )
+  : $$l rem:c ++ ;             ( l = right )
+  : $$p blk -- ;               ( p = previous block )
+  : $$n blk ++ ;               ( n = next block )
+  : $$z pop pop 2drop ;        ( z = exit REM )
+  : edit  ( - ) repeat display key edit? match bounds again ;
+}}
