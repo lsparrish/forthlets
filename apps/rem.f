@@ -74,6 +74,10 @@ stub rem
     : show ( va-  )  dup c! (v) ! ;
     : wr   ( n-   )  bounds addr ! ;
     : ws   ( -    )  whitespace off later whitespace on ;
+    : cop1 ( -    )  l @ (line) tib      64 copy ;
+    : cop2 ( -    )  l @ (line) tib 64 + 64 copy ;
+    : pas1 ( -    )  tib      l @ (line) 64 copy ;
+    : pas2 ( -    )  tib 64 + l @ (line) 64 copy ;
     : :a  ( ri-ri )  swap dup 8 , , swap ; immediate
     here is r ] v cr pos . . ;
     here is v ] ( - ) addr va show ;
@@ -88,6 +92,18 @@ stub rem
         dup 8  =if b drop :a ;then
         dup 10 =if drop m r else wr rt r then
       again ;
+    here is x ]
+      key 
+      match: i cop1 l -- cop2 pas1 l ++ pas2 l -- then
+      match: k cop1 l ++ cop2 pas1 l -- pas2 l ++ then
+      match: j addr @ tib !
+               addr 1- @ addr !
+               tib @ addr 1- ! c -- then
+      match: l addr @ tib !
+               addr 1+ @ addr !
+               tib @ addr 1+ ! c ++ then
+      drop ;
+      
   }
 
   : arr ( k-k )
@@ -119,6 +135,7 @@ stub rem
       match: b  b      then
       match: s  s      then
       match: m  m      then
+      match: x  x      then
       match: z  drop  ;then
       bounds
       drop
