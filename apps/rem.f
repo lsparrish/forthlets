@@ -93,7 +93,7 @@ stub rem
         dup 10 =if drop m r else wr rt r then
       again ;
     here is x ]
-      key 
+      key
       match: i cop1 l -- cop2 pas1 l ++ pas2 l -- then
       match: k cop1 l ++ cop2 pas1 l -- pas2 l ++ then
       match: j addr @ tib !
@@ -103,7 +103,7 @@ stub rem
                addr 1+ @ addr !
                tib @ addr 1+ ! c ++ then
       drop ;
-      
+
   }
 
   : arr ( k-k )
@@ -112,7 +112,7 @@ stub rem
 
   : rep ( n-k )
     key swap 49 - for arr next bounds ;
-    
+
   here ] ( c-c ) dup 9 =if drop 27 then ; is (remap-keys)
 
   here is rem ]
