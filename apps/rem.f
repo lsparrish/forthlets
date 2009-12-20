@@ -47,6 +47,7 @@ stub rem
   : beg ( - ) 0 c ! ;
   : end ( - ) 63 c ! ;
   : mid ( - ) 31 c ! ;
+  : 1st ( - ) 0 blk ! ;
 
   : match-num ( n- )
     ` over ` =if ; immediate
@@ -60,7 +61,7 @@ stub rem
     c @ 64 =if beg dn then
     l @ -1 =if top p then
     l @  8 =if bot n then
-    blk @ -1 =if 0 s then
+    blk @ -1 =if 1st then
     blk @ #-blocks @ >if blk -- then
   ;
 
