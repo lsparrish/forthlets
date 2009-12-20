@@ -80,9 +80,16 @@ stub rem
       again ;
   }
 
+  : rep ( n-k ) 
+  key swap 48 - for
+    match: j lt then match: l rt then
+    match: i up then match: k dn then
+  next ;
+
   here is rem ]
     repeat
       r key
+      dup 48 >if dup 58 <if rep then then
       27 alias-num: q  then
       match: i  up     then
       match: j  lt     then
