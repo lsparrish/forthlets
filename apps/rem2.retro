@@ -48,6 +48,52 @@ variable rem:c  ( column )
     blk @ -1 =if 1st then
     blk @ #-blocks @ >if blk -- then
   ;
+  
+  ( Character movement, current pos to end of line )
+  : c:hom rem:l @ (line) ;
+  : c:cur c:hom rem:c @ + ;
+  : c:end c:hom 63 + ;
+  : c:cur-hom    rem:c @   ;
+  : c:cur-end 64 rem:c @ - ;
+  : c:end-rec ( - ) 
+    c:end @
+    c:cur tib
+    c:cur-end copy
+    tib c:cur 1+
+    c:cur-end 1- copy
+    c:cur ! ;
+  : c:end-sen ( - )
+    c:cur @
+    c:cur tib
+    c:cur-end copy
+    tib 1+ c:cur
+    c:cur-end copy
+    c:end ! ;
+
+  ( Line swapping, with first or end line )
+  : l:hom 0 (line) ;
+  : l:cur rem:l @ (line) ;
+  : l:end 7 (line) ;
+  : l:hom-swp
+    l:cur tib   64 copy
+    l:hom l:cur 64 copy
+    tib   l:hom 64 copy ;
+  : l:end-swp
+    l:cur tib   64 copy
+    l:end l:cur 64 copy
+    tib   l:end 64 copy ;
+
+  : x-keys ( - )
+    repeat
+      key
+      dup char: l =if c:end-rec then
+      dup char: j =if c:end-sen then
+      dup char: i =if l:hom-swp drop ;then
+      dup char: k =if l:end-swp drop ;then
+      dup char: q =if drop   ;then
+      bounds display
+      drop
+    again ;
 
   : input ( - )
     repeat
@@ -66,7 +112,7 @@ variable rem:c  ( column )
   : $$j rem:c -- ;             ( j = left   )
   : $$k rem:l ++ ;             ( k = down   )
   : $$l rem:c ++ ;             ( l = right  )
-  : $$m $$k beg ;              ( m = center )
+  : $$m $$k beg ;              ( m = enter  )
   : $$I top ;                  ( I = top    )
   : $$J beg ;                  ( J = start  )
   : $$K bot ;                  ( K = bottom )
@@ -76,5 +122,6 @@ variable rem:c  ( column )
   : $$n blk ++ ;               ( n = next block )
   : $$e e ;                    ( e = evaluate block )
   : $$z pop pop 2drop ;        ( z = exit REM )
+  : $$x x-keys ;               ( x = x-keys )
   : edit  ( - ) repeat display key edit? match bounds again ;
 }}
