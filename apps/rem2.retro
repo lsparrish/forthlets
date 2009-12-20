@@ -87,11 +87,11 @@ stub rem.display
 
 {{
   ( Character movement, current pos to end of line )
-  : c:hom rem:l @ (line) ;
-  : c:cur c:hom rem:c @ + ;
-  : c:end c:hom 63 + ;
-  : c:cur-hom    rem:c @   ;
-  : c:cur-end 64 rem:c @ - ;
+  : c:hom ( -a ) rem:l @ (line) ;
+  : c:cur ( -a ) c:hom rem:c @ + ;
+  : c:end ( -a ) c:hom 63 + ;
+  : c:cur-hom ( -n )    rem:c @   ;
+  : c:cur-end ( -n ) 64 rem:c @ - ;
   : c:end-rec ( - )
     c:end @
     c:cur tib
@@ -108,11 +108,11 @@ stub rem.display
     c:end ! ;
 
   ( Line swapping, with first or end line )
-  : l:hom 0 (line) ;
-  : l:cur rem:l @ (line) ;
-  : l:end 7 (line) ;
-  : l:up  l:cur 64 - ;
-  : l:dn  l:cur 64 + ;
+  : l:hom ( -a ) 0 (line) ;
+  : l:cur ( -a ) rem:l @ (line) ;
+  : l:end ( -a ) 7 (line) ;
+  : l:up  ( -a ) l:cur 64 - ;
+  : l:dn  ( -a ) l:cur 64 + ;
   : l:cur-up
     l:cur tib   64 copy
     l:up  l:cur 64 copy
@@ -129,7 +129,7 @@ stub rem.display
     l:cur tib   64 copy
     l:end l:cur 64 copy
     tib   l:end 64 copy ;
-
+    
   ( Hook for key sequences beginning with x. )
   : x-keys ( - )
     repeat
@@ -140,7 +140,7 @@ stub rem.display
       dup char: K =if l:cur-dn  then
       dup char: i =if l:hom-swp then
       dup char: k =if l:end-swp then
-      dup char: x =if drop   ;then
+      dup char: x =if drop     ;then
       rem.display
       drop
     again ;
