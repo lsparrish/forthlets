@@ -25,10 +25,12 @@
 ( Array of colors, in the order we want them displayed      )
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
 create colors
-  ' black , ' white , ' blue , ' green , ' cyan ,
-  ' red , ' purple , ' brown , ' gray , ' darkgray ,
-  ' brightblue , ' brightgreen , ' brightcyan ,
-  ' brightred , ' magenta , ' yellow ,
+  ' black ,      ' white ,       ' blue ,
+  ' green ,      ' cyan ,        ' red ,
+  ' purple ,     ' brown ,       ' gray ,
+  ' darkgray ,   ' brightblue ,  ' brightgreen ,
+  ' brightcyan , ' brightred ,   ' magenta ,
+  ' yellow ,
 
 
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
@@ -49,17 +51,17 @@ create colors
 ( Check to see if the click is within a given region)
 : region ( xul-f )
   rot dup push
-  >if pop <if -1 ;; then then
+  >if pop <if -1 ;then then
   pop drop drop 0
 ;
 
 : region: ( "- )
-   ` region -1 literal, ` =if ` drop ' compile 0 literal, ` ;; ` then ;
+   ` region -1 literal, ` =if ` drop ' compile 0 literal, ` ;then ;
 immediate
 
 : check ( -f )
   mouse 350 >if
-  dup 0 49 region: black          dup 50 99 region: white
+  dup   0  49 region: black       dup  50  99 region: white
   dup 100 149 region: blue        dup 150 199 region: green
   dup 200 249 region: cyan        dup 250 299 region: red
   dup 300 349 region: purple      dup 350 399 region: brown
@@ -76,10 +78,3 @@ immediate
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
 : (draw) click? 0; drop check 0; drop mouse pixel ;
 : draw clear menu black repeat (draw) again ;
-
-
-( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
-( Set 'draw' to run on startup and save the image           )
-( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
-' draw is boot
-save bye

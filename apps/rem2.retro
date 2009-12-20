@@ -74,6 +74,7 @@ variable rem:c  ( column )
   : $$M mid ;                  ( M = middle )
   : $$p blk -- ;               ( p = previous block )
   : $$n blk ++ ;               ( n = next block )
+  : $$e e ;                    ( e = evaluate block )
   : $$z pop pop 2drop ;        ( z = exit REM )
   : edit  ( - ) repeat display key edit? match bounds again ;
 }}
