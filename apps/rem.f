@@ -32,6 +32,7 @@ stub rem
 
   stub b      ( backspace )
   stub s      ( space     )
+  stub m      ( return    )
 
   : p ( - ) blk -- ;  ( previous )
   : n ( - ) blk ++ ;  ( next     )
@@ -45,7 +46,7 @@ stub rem
   : bot ( - ) 7 l ! ;
   : beg ( - ) 0 c ! ;
   : end ( - ) 63 c ! ;
-  : cen ( - ) 31 c ! ;
+  : mid ( - ) 31 c ! ;
 
   : match-num ( n- )
     ` over ` =if ; immediate
