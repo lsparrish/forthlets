@@ -82,11 +82,11 @@ stub rem
       again ;
   }
 
-  : arr ( k-k ) 
+  : arr ( k-k )
     match: j lt then match: l rt then
     match: i up then match: k dn then ;
 
-  : rep ( n-k ) 
+  : rep ( n-k )
   key swap 48 - for arr next ;
 
   here is rem ]
