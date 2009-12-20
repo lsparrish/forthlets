@@ -69,22 +69,24 @@ stub rem
     : c!   ( a-   )  char: * swap ! ;
     : show ( va-  )  dup c! (v) ! ;
     : wr   ( n-   )  bounds addr ! ;
+    : ws   ( -    )  whitespace off later whitespace on ;
     here is r ] v cr pos . . ;
     here is v ] ( - ) addr va show ;
     here is q ] ( n-n )
+      ws
       repeat
         key
         dup 27 =if drop ;then
         dup 8  =if drop lt 32 wr r q ;then
-        wr rt r
+        dup 10 =if drop 0 c ! l ++ r else wr rt r then
       again ;
   }
 
-  : arr ( k-k ) 
+  : arr ( k-k )
     match: j lt then match: l rt then
     match: i up then match: k dn then ;
 
-  : rep ( n-k ) 
+  : rep ( n-k )
   key swap 48 - for arr next ;
 
   here is rem ]
