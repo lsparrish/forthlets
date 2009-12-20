@@ -125,5 +125,6 @@ variable rem:c  ( column )
   : $$e e ;                    ( e = evaluate block )
   : $$z pop pop 2drop ;        ( z = exit REM )
   : $$x x-keys ;               ( x = x-keys )
+  : $$e pop pop 2drop e ;      ( e = eval block )
   : edit  ( - ) repeat display key edit? match bounds again ;
 }}
