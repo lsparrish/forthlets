@@ -74,6 +74,7 @@ stub rem
     : show ( va-  )  dup c! (v) ! ;
     : wr   ( n-   )  bounds addr ! ;
     : ws   ( -    )  whitespace off later whitespace on ;
+    : :a  ( ri-ri )  swap dup 8 , , swap ; immediate
     here is r ] v cr pos . . ;
     here is v ] ( - ) addr va show ;
     here is b ] lt 32 wr r ;
@@ -84,7 +85,7 @@ stub rem
       repeat
         key
         dup 27 =if drop ;then
-        dup 8  =if b drop q ;then
+        dup 8  =if b drop :a ;then
         dup 10 =if drop m r else wr rt r then
       again ;
   }
