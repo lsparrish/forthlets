@@ -83,6 +83,7 @@ variable rem:c  ( column )
     l:end l:cur 64 copy
     tib   l:end 64 copy ;
 
+  ( Hook for key sequences beginning with x. )
   : x-keys ( - )
     repeat
       key
@@ -104,9 +105,10 @@ variable rem:c  ( column )
       bounds display
     again
   ;
-
+  : ws    (  -  ) whitespace dup off @ later whitespace ! ;
   : match ( c-  ) s" $$_" dup push 2 + ! pop find if d->xt @ execute then ;
-  : edit? ( c-c ) dup 27 =if whitespace dup off @ input whitespace ! then ;
+  : edit? ( c-c ) dup 27 =if ws input then ;
+  here ] dup 9 =if drop 27 then ; is (remap-keys)
 ---reveal---
   : $$i rem:l -- ;             ( i = up     )
   : $$j rem:c -- ;             ( j = left   )
