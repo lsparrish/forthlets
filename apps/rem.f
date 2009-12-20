@@ -88,6 +88,8 @@ stub rem
 
   : rep ( n-k )
     key swap 49 - for arr next bounds ;
+    
+  here ] ( c-c ) dup 9 =if drop 27 then ; is (remap-keys)
 
   here is rem ]
     repeat
