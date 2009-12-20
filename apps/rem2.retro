@@ -157,20 +157,40 @@ stub rem.display
     m:h-up  m:h-cur m:h-len copy
     tib     m:h-up  m:h-len copy rem:l -- ;
 
+  ( Hook for tail movement keys )
+  : tail-keys ( - )
+    repeat
+      key
+      dup char: i =if m:tail-up then
+      dup char: k =if m:tail-dn then
+      dup char: x =if drop     ;then
+      rem.display
+      drop
+    again ;
+
+  ( Hook for head movement keys )
+  : head-keys ( - )
+    repeat
+      key
+      dup char: i =if m:head-up then
+      dup char: k =if m:head-dn then
+      dup char: x =if drop     ;then
+      rem.display
+      drop
+    again ;
+
   ( Hook for key sequences beginning with x. )
   : x-keys ( - )
     repeat
       key
       dup char: l =if c:end-rec then
       dup char: j =if c:end-sen then
-      dup char: I =if l:cur-up  then
-      dup char: K =if l:cur-dn  then
       dup char: i =if l:hom-swp then
       dup char: k =if l:end-swp then
-      dup char: u =if m:head-up then
-      dup char: o =if m:tail-up then
-      dup char: U =if m:head-dn then
-      dup char: O =if m:tail-dn then
+      dup char: I =if l:cur-up  then
+      dup char: K =if l:cur-dn  then
+      dup char: u =if head-keys then
+      dup char: o =if tail-keys then
       dup char: x =if drop     ;then
       rem.display
       drop
