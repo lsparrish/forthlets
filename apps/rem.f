@@ -59,8 +59,8 @@ stub rem
   : bounds ( - )
     c @ -1 =if end up then
     c @ 64 =if beg dn then
-    l @ -1 =if top p then
-    l @  8 =if bot n then
+    l @ -1 =if bot p then
+    l @  8 =if top n then
     blk @ -1 =if 1st then
     blk @ #-blocks @ >if blk -- then
   ;
