@@ -129,7 +129,34 @@ stub rem.display
     l:cur tib   64 copy
     l:end l:cur 64 copy
     tib   l:end 64 copy ;
-    
+
+  ( Split-line swapping )
+  : m:t-len  ( -n ) 64 rem:c @ - ;
+  : m:h-len  ( -n )    rem:c @ ;
+  : m:t-cur  ( -a ) l:cur m:h-len + ;
+  : m:t-dn   ( -a ) l:dn  m:h-len + ;
+  : m:t-up   ( -a ) l:up  m:h-len + ;
+  : m:h-cur  ( -a ) l:cur ;
+  : m:h-dn   ( -a ) l:dn  ;
+  : m:h-up   ( -a ) l:up  ;
+
+  : m:tail-dn ( - )
+    m:t-cur tib     m:t-len copy
+    m:t-dn  m:t-cur m:t-len copy
+    tib     m:t-dn  m:t-len copy rem:l ++ ;
+  : m:head-dn ( - )
+    m:h-cur tib     m:h-len copy
+    m:h-dn  m:h-cur m:h-len copy
+    tib     m:h-dn  m:h-len copy rem:l ++ ;
+  : m:tail-up ( - )
+    m:t-cur tib     m:t-len copy
+    m:t-up  m:t-cur m:t-len copy
+    tib     m:t-up  m:t-len copy rem:l -- ;
+  : m:head-up ( - )
+    m:h-cur tib     m:h-len copy
+    m:h-up  m:h-cur m:h-len copy
+    tib     m:h-up  m:h-len copy rem:l -- ;
+
   ( Hook for key sequences beginning with x. )
   : x-keys ( - )
     repeat
@@ -140,6 +167,10 @@ stub rem.display
       dup char: K =if l:cur-dn  then
       dup char: i =if l:hom-swp then
       dup char: k =if l:end-swp then
+      dup char: u =if m:head-up then
+      dup char: o =if m:tail-up then
+      dup char: U =if m:head-dn then
+      dup char: O =if m:tail-dn then
       dup char: x =if drop     ;then
       rem.display
       drop
