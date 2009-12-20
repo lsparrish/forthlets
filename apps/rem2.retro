@@ -126,9 +126,9 @@ stub rem.display
       key
       dup char: l =if c:end-rec then
       dup char: j =if c:end-sen then
-      dup char: i =if l:hom-swp drop ;then
-      dup char: k =if l:end-swp drop ;then
-      dup char: q =if drop   ;then
+      dup char: i =if l:hom-swp then
+      dup char: k =if l:end-swp then
+      dup char: x =if drop   ;then
       rem.display
       drop
     again ;
