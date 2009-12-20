@@ -24,6 +24,8 @@
 variable rem:l  ( line   )
 variable rem:c  ( column )
 
+stub rem.display
+
 {{
   ( Display block, with cursor )
   : pos  ( -cl)  rem:c @ rem:l @ ;
@@ -48,14 +50,48 @@ variable rem:c  ( column )
     blk @ -1 =if 1st then
     blk @ #-blocks @ >if blk -- then
   ;
-  
+
+  : input ( - )
+    repeat
+      key
+      dup 27 <> 0; drop
+      dup  8 =if drop rem:c -- rem.display [ over 8 , , ] then
+      dup 10 =if drop rem:l ++ else pos get ! rem:c ++ then
+      rem.display
+    again
+  ;
+  : ws    (  -  ) whitespace dup off @ later whitespace ! ;
+  : match ( c-  ) s" $$_" dup push 2 + ! pop find if d->xt @ execute else drop then ;
+  : edit? ( c-c ) dup 27 =if ws input drop then ;
+  here ] dup 9 =if drop 27 then ; is (remap-keys)
+  here ] bounds display ; is rem.display
+---reveal---
+  : edit  ( - ) repeat rem.display key edit? match again ;
+  : $$i rem:l -- ;             ( i = up     )
+  : $$j rem:c -- ;             ( j = left   )
+  : $$k rem:l ++ ;             ( k = down   )
+  : $$l rem:c ++ ;             ( l = right  )
+  : $$m $$k beg ;              ( m = enter  )
+  : $$I top ;                  ( I = top    )
+  : $$J beg ;                  ( J = start  )
+  : $$K bot ;                  ( K = bottom )
+  : $$L end ;                  ( L = end    )
+  : $$M mid ;                  ( M = middle )
+  : $$p blk -- ;               ( p = previous block )
+  : $$n blk ++ ;               ( n = next block )
+  : $$z pop pop 2drop ;        ( z = exit REM )
+  : $$e pop pop 2drop e ;      ( e = evaluate block )
+}}
+
+
+{{
   ( Character movement, current pos to end of line )
   : c:hom rem:l @ (line) ;
   : c:cur c:hom rem:c @ + ;
   : c:end c:hom 63 + ;
   : c:cur-hom    rem:c @   ;
   : c:cur-end 64 rem:c @ - ;
-  : c:end-rec ( - ) 
+  : c:end-rec ( - )
     c:end @
     c:cur tib
     c:cur-end copy
@@ -92,38 +128,10 @@ variable rem:c  ( column )
       dup char: i =if l:hom-swp drop ;then
       dup char: k =if l:end-swp drop ;then
       dup char: q =if drop   ;then
-      bounds display
+      rem.display
       drop
     again ;
-
-  : input ( - )
-    repeat
-      key
-      dup 27 <> 0; drop
-      dup  8 =if drop rem:c -- bounds display [ over 8 , , ] then
-      dup 10 =if drop rem:l ++ else pos get ! rem:c ++ then
-      bounds display
-    again
-  ;
-  : ws    (  -  ) whitespace dup off @ later whitespace ! ;
-  : match ( c-  ) s" $$_" dup push 2 + ! pop find if d->xt @ execute then ;
-  : edit? ( c-c ) dup 27 =if ws input then ;
-  here ] dup 9 =if drop 27 then ; is (remap-keys)
 ---reveal---
-  : $$i rem:l -- ;             ( i = up     )
-  : $$j rem:c -- ;             ( j = left   )
-  : $$k rem:l ++ ;             ( k = down   )
-  : $$l rem:c ++ ;             ( l = right  )
-  : $$m $$k beg ;              ( m = enter  )
-  : $$I top ;                  ( I = top    )
-  : $$J beg ;                  ( J = start  )
-  : $$K bot ;                  ( K = bottom )
-  : $$L end ;                  ( L = end    )
-  : $$M mid ;                  ( M = middle )
-  : $$p blk -- ;               ( p = previous block )
-  : $$n blk ++ ;               ( n = next block )
-  : $$e pop pop 2drop e ;      ( e = eval block )
-  : $$z pop pop 2drop ;        ( z = exit REM )
   : $$x x-keys ;               ( x = x-keys )
   : edit  ( - ) repeat display key edit? match bounds again ;
 }}
