@@ -31,6 +31,8 @@ stub rem
   variable c  ( column  )
 
   stub b      ( backspace )
+  stub s      ( space     )
+
   : p ( - ) blk -- ;  ( previous )
   : n ( - ) blk ++ ;  ( next     )
 
@@ -44,7 +46,6 @@ stub rem
   : beg ( - ) 0 c ! ;
   : end ( - ) 63 c ! ;
   : cen ( - ) 31 c ! ;
-  : mid ( - ) 3 l ! ;
 
   : match-num ( n- )
     ` over ` =if ; immediate
@@ -74,13 +75,15 @@ stub rem
     here is r ] v cr pos . . ;
     here is v ] ( - ) addr va show ;
     here is b ] lt 32 wr r ;
+    here is s ] 32 wr rt ;
+    here is m ] dn beg ;
     here is q ] ( n-n )
       ws
       repeat
         key
         dup 27 =if drop ;then
         dup 8  =if b drop ;then
-        dup 10 =if drop 0 c ! l ++ r else wr rt r then
+        dup 10 =if drop m r else wr rt r then
       again ;
   }
 
@@ -99,9 +102,10 @@ stub rem
       dup 48 >if dup 58 <if rep then then
       27 alias-num: q  then
       8  alias-num: b  then
+      32 alias-num: s  then
+      10 alias-num: m  then
       arr
       match: I  top    then
-      match: m  cen    then
       match: J  beg    then
       match: K  bot    then
       match: L  end    then
@@ -110,6 +114,8 @@ stub rem
       match: n  n      then
       match: q  q      then
       match: b  b      then
+      match: s  s      then
+      match: m  m      then
       match: z  drop  ;then
       bounds
       drop
