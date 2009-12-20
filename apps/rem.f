@@ -92,10 +92,7 @@ stub rem
       r key
       dup 48 >if dup 58 <if rep then then
       27 alias-num: q  then
-      match: i  up     then
-      match: j  lt     then
-      match: k  dn     then
-      match: l  rt     then
+      arr
       match: I  top    then
       match: m  cen    then
       match: J  beg    then
