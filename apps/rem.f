@@ -84,7 +84,7 @@ stub rem
       repeat
         key
         dup 27 =if drop ;then
-        dup 8  =if b drop ;then
+        dup 8  =if b drop q ;then
         dup 10 =if drop m r else wr rt r then
       again ;
   }
