@@ -81,6 +81,7 @@ stub rem.display
   : $$n blk ++ ;               ( n = next block )
   : $$z pop pop 2drop ;        ( z = exit REM )
   : $$e pop pop 2drop e ;      ( e = evaluate block )
+  : edit  ( - ) repeat display key edit? match bounds again ;
 }}
 
 
@@ -133,5 +134,4 @@ stub rem.display
     again ;
 ---reveal---
   : $$x x-keys ;               ( x = x-keys )
-  : edit  ( - ) repeat display key edit? match bounds again ;
 }}
