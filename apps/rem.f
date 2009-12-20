@@ -87,7 +87,7 @@ stub rem
     match: i up then match: k dn then ;
 
   : rep ( n-k )
-  key swap 48 - for arr next ;
+    key swap 49 - for arr next bounds ;
 
   here is rem ]
     repeat
