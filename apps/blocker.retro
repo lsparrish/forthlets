@@ -1,5 +1,5 @@
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
-( Blocker ["b"]                                             )
+( Blockfile converter ["bconv"]                             )
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
 ( Distributed under the Creative Commons Zero License:      )
 (                                                           )
@@ -28,16 +28,18 @@ variable l     ( lines   )
 : pos c @ l @ (line) + ;
 : ws whitespace dup off @ later whitespace ! ;
 ---reveal---
-: b
+: bconv
   ws
   repeat
-    key
-    dup emit
-    pos ! c ++
-    c @ 64 =if l ++ 0 c ! then
-    pos 1- @
-    10 =if pos 1- 32 64 c @ - fill l ++ 0 c ! then
-    l @ (line) dup @ char: ~ =if 32 swap ! v ;then
+  (  -k ) key dup emit
+  ( k-k ) c @ 64 =if l ++ 0 c ! then
+  ( k-k ) dup 10 =if
+  ( k-  )   pos 32 64 c @ - fill
+  (  -  )   l ++ 0 c !
+  (  -  )   save
+          else
+  ( k-  )   pos ! c ++
+          then
   again ;
 }}
-
+bconv
