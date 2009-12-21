@@ -1,0 +1,28 @@
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Blocker ["b"]                                             )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Inserts lines of ordinary text into blockfile format.     )
+(                                                           )
+( Copyright Luke Parrish 2009                               )
+( License: CC0                                              ) 
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+{{
+
+variable c     ( columns )
+variable l     ( lines   )
+: pos c @ l @ (line) + ;
+: ws whitespace dup off @ later whitespace ! ;
+---reveal---
+: b
+  ws
+  repeat
+    key
+    dup emit
+    pos ! c ++
+    c @ 64 =if l ++ 0 c ! then
+    pos 1- @
+    10 =if pos 1- 32 64 c @ - fill l ++ 0 c ! then
+    l @ (line) dup @ char: ~ =if 32 swap ! v ;then
+  again ;
+}}
+b
