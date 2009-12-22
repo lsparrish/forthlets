@@ -59,23 +59,26 @@ create list
   dup .
   dup 127 <if 
   dup 31  >if
-    dup emit
-  ;then ;then . cr ;
+    emit
+  ;then drop ;then . cr ;
 
 variable code
 : chorder
   0 code !
   repeat
     defkey
-    dup char: z =if drop ( bye ) ;then
+    dup char: z =if drop drop ( bye ) ;then
+    dup char: c =if drop code @ char: x then
+    dup char: e =if drop code @ show-char char: x then
+    dup char: d =if drop code @ . char: x then
+    dup char: s =if drop code @ . char: ' then
     dup char: x =if
       drop 0
-      code @ 
       0 code !
     else
-      lookup dup . dup emit cr
+      lookup dup dup . 32 >if dup emit then cr
       code @ + code !
-      code @ show-char cr
+      ( code @ show-char cr )
     then
   again ;
 chorder
