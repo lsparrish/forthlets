@@ -33,7 +33,8 @@
       (  -k ) key dup emit
       ( k-k ) c @ 64 =if l ++ 0 c ! then
       ( k-k ) dup 10 =if
-      ( k-  )   pos 32 64 c @ - fill
+      ( k-  )   drop
+      (  -  )   pos 32 64 c @ - fill
       (  -  )   l ++ 0 c !
               else
       ( k-  )   pos ! c ++
