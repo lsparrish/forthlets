@@ -30,6 +30,9 @@
 (  j k   ' )
 ( n        )
 
+: default: ' 2 + compile ; compile-only
+: defkey default: key ;
+
 variable len
 : ^ ` char: 32 accept tib >number , , len ++ ;
 create list
@@ -63,11 +66,14 @@ variable code
 : chorder
   0 code !
   repeat
-    key dup char: z =if drop ( bye ) ;then
-        dup char: x =if 0 code ! drop 0 else
-        lookup dup . dup emit cr
-        code @ + code !
-        code @ show-char cr
-        then
+    defkey
+    dup char: z =if drop ( bye ) ;then
+    dup char: x =if
+      0 code ! drop 0
+    else
+      lookup dup . dup emit cr
+      code @ + code !
+      code @ show-char cr
+    then
   again ;
 chorder
