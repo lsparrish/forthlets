@@ -22,25 +22,24 @@
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
 
 {{
-
-variable c     ( columns )
-variable l     ( lines   )
-: pos c @ l @ (line) + ;
-: ws whitespace dup off @ later whitespace ! ;
+  variable c     ( columns )
+  variable l     ( lines   )
+  : pos ( -a ) c @ l @ (line) + ;
+  : ws  ( -  ) whitespace dup off @ later whitespace ! ;
 ---reveal---
-: bconv
-  ws
-  repeat
-  (  -k ) key dup emit
-  ( k-k ) c @ 64 =if l ++ 0 c ! then
-  ( k-k ) dup 10 =if
-  ( k-  )   pos 32 64 c @ - fill
-  (  -  )   l ++ 0 c !
-  (  -  )   save
-          else
-  ( k-  )   pos ! c ++
-          then
-  l @ (line) @ char: ^ =if ;then
-  again ;
+  : bconv ( "- )
+    ws
+    repeat
+      (  -k ) key dup emit
+      ( k-k ) c @ 64 =if l ++ 0 c ! then
+      ( k-k ) dup 10 =if
+      ( k-  )   pos 32 64 c @ - fill
+      (  -  )   l ++ 0 c !
+      (  -  )   save
+              else
+      ( k-  )   pos ! c ++
+              then
+      l @ (line) @ char: ^ =if ;then
+    again ;
 }}
 bconv
