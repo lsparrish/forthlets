@@ -1,0 +1,73 @@
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Chord Keyboard ["chorder"]                                )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Distributed under the Creative Commons Zero License:      )
+(                                                           )
+( The person who associated a work with this document has   )
+( dedicated this work to the Commons by waiving all of his  )
+( or her rights to the work under copyright law and all     )
+( related or neighboring legal rights he or she had in the  )
+( work, to the extent allowable by law.                     )
+(                                                           )
+( Other Rights — In no way are any of the following rights  )
+( affected by CC0:                                          )
+(  * Patent or trademark rights held by the person who      )
+(    associated this document with a work.                  )
+(  * Rights other persons may have either in the work       )
+(    itself or in how the work is used, such as publicity   )
+(    or privacy rights.                                     )
+(                                                           )
+( Charles Childers, December 2009                           )
+( Luke Parrish, December 2009                               )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+
+
+( Top set: )
+(  i o  ) 
+( j   ; ) 
+
+( Bottom set: )
+(  j k   ' )
+( n        )
+
+variable len
+: ^ ` char: 32 accept tib >number , , len ++ ;
+create list
+^ ' 0
+^ m 1
+^ k 2
+^ l 4
+
+^ j 8
+^ i 16
+^ o 32
+^ n 64
+^ ; 96
+
+: lookup  ( k- )
+  len @ for
+    list r 2 * + 1-
+    2dup @ =if
+      1- @ swap drop pop drop ;then
+    drop
+  next drop 0 ;
+
+: show-char
+  dup .
+  dup 127 <if 
+  dup 31  >if
+    dup emit
+  ;then ;then . cr ;
+
+variable code
+: chorder
+  0 code !
+  repeat
+    key dup char: z =if drop ( bye ) ;then
+        dup char: x =if 0 code ! drop 0 else
+        lookup dup . dup emit cr
+        code @ + code !
+        code @ show-char cr
+        then
+  again ;
+chorder
