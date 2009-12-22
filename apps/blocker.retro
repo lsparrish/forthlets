@@ -42,4 +42,17 @@
       l @ (line) @ char: ^ =if ;then
     again ;
 }}
+
+{{
+  : (type)  for dup @ emit 1+ next ;
+  : type    (type) drop ;
+  : row     dup 64 type 64 + cr ;
+  : .rows   row row row row
+            row row row row ;
+  : vb      blk @ block .rows drop ;
+---reveal---
+  : tconv ( - )
+    0 blk ! #-blocks @ for vb blk ++ next ;
+}}
+
 bconv
