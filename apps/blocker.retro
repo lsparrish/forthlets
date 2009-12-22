@@ -27,7 +27,7 @@
   : pos ( -a ) c @ l @ (line) + ;
   : ws  ( -  ) whitespace dup off @ later whitespace ! ;
 ---reveal---
-  : bconv ( "- )
+  : fromtext ( "- )
     ws
     repeat
       (  -k ) key dup emit
@@ -41,5 +41,15 @@
               then
       l @ (line) @ char: ^ =if ;then
     again ;
+
+  : totext
+    repeat
+      l @ (line) tib 64 copy
+      0 tib 64 + !
+      tib type cr
+      l ++
+      l @ 7 >if 0 l ! blk ++ then
+      l @ (line) @ char: ^ =if ;then
+    again ;
 }}
-bconv
+fromtext
