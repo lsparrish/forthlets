@@ -40,6 +40,7 @@ variable l     ( lines   )
           else
   ( k-  )   pos ! c ++
           then
+  l @ (line) @ char: ^ ;then
   again ;
 }}
 bconv
