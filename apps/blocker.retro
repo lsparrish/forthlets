@@ -36,7 +36,6 @@ variable l     ( lines   )
   ( k-k ) dup 10 =if
   ( k-  )   pos 32 64 c @ - fill
   (  -  )   l ++ 0 c !
-  (  -  )   save
           else
   ( k-  )   pos ! c ++
           then
