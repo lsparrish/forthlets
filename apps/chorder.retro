@@ -69,7 +69,9 @@ variable code
     defkey
     dup char: z =if drop ( bye ) ;then
     dup char: x =if
-      0 code ! drop 0
+      drop 0
+      code @ 
+      0 code !
     else
       lookup dup . dup emit cr
       code @ + code !
