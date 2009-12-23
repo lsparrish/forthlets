@@ -25,11 +25,10 @@
   : default: ' 2 + compile ; compile-only
   : defkey default: key ;
 
-  : ^ ( nc- ) , +1 ;
+  : ^ ( nc- ) , 1+ ;
 
-  variable len
+  variable len 0
   create list
-  0
   key j ^ ( 0 )
   key i ^ ( 1 )
   key o ^ ( 2 )
