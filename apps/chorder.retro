@@ -21,64 +21,35 @@
 ( Luke Parrish, December 2009                               )
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
 
-
-( Top set: )
-(  i o  ) 
-( j   ; ) 
-
-( Bottom set: )
-(  j k   ' )
-( n        )
-
+{{
 : default: ' 2 + compile ; compile-only
 : defkey default: key ;
 
 variable len
-: ^ ` char: 32 accept tib >number , , len ++ ;
+
+: ^ ( c- ) , len ++ ;
+
 create list
-^ ' 0
-^ m 1
-^ k 2
-^ l 4
 
-^ j 8
-^ i 16
-^ o 32
-^ n 64
-^ ; 96
+key j ^ ( 0 )
+key i ^ ( 1 )
+key o ^ ( 2 )
+key ; ^ ( 3 )
 
-: lookup  ( k- )
+: tonum   ( k-n )
+  dup char: z =if pop drop bye ;then
   len @ for
-    list r 2 * + 1-
-    2dup @ =if
-      1- @ swap drop pop drop ;then
-    drop
-  next drop 0 ;
+    r 1- list + @ over =if drop pop 1- ;then
+  next ;
 
-: show-char
-  dup .
-  dup 127 <if 
-  dup 31  >if
-    emit
-  ;then drop ;then . cr ;
+---reveal---
 
-variable code
 : chorder
-  0 code !
   repeat
-    defkey
-    dup char: z =if drop drop ( bye ) ;then
-    dup char: c =if drop code @ char: x then
-    dup char: e =if drop code @ show-char char: x then
-    dup char: d =if drop code @ . char: x then
-    dup char: s =if drop code @ . char: ' then
-    dup char: x =if
-      drop 0
-      0 code !
-    else
-      lookup dup dup . 32 >if dup emit then cr
-      code @ + code !
-      ( code @ show-char cr )
-    then
+    key tonum 4 * 4 *
+    key tonum 4 *
+    key tonum
+    + + . cr
   again ;
+}}
 chorder
