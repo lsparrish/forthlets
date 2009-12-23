@@ -25,16 +25,16 @@
   : default: ' 2 + compile ; compile-only
   : defkey default: key ;
 
-  : ^ ( nc- ) , ++ ;
+  : ^ ( nc- ) , +1 ;
 
   variable len
   create list
-  len @
+  0
   key j ^ ( 0 )
   key i ^ ( 1 )
   key o ^ ( 2 )
   key ; ^ ( 3 )
-  len !
+  1+ len !
 
   variable skip
   variable offset
@@ -69,4 +69,3 @@
       then
     again ;
 }}
-chorder
