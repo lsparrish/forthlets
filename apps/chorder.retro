@@ -22,34 +22,51 @@
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
 
 {{
-: default: ' 2 + compile ; compile-only
-: defkey default: key ;
+  : default: ' 2 + compile ; compile-only
+  : defkey default: key ;
 
-variable len
+  : ^ ( nc- ) , ++ ;
 
-: ^ ( c- ) , len ++ ;
+  variable len
+  create list
+  len @
+  key j ^ ( 0 )
+  key i ^ ( 1 )
+  key o ^ ( 2 )
+  key ; ^ ( 3 )
+  len !
 
-create list
+  variable skip
+  variable offset
+  : command ( c-c )
+    dup char: z =if pop drop bye ;then
+    dup char: l =if drop char: x 64 offset +! then
+    dup char: k =if drop char: x 64 offset -! then
+    dup char: x =if drop 0 skip on ;then
+  ;
 
-key j ^ ( 0 )
-key i ^ ( 1 )
-key o ^ ( 2 )
-key ; ^ ( 3 )
-
-: tonum   ( k-n )
-  dup char: z =if pop drop bye ;then
-  len @ for
-    r 1- list + @ over =if drop pop 1- ;then
-  next ;
-
+  : tonum   ( k-n )
+    len @ for
+      r 1- list + @ over =if drop pop 1- ;then
+    next ;
+  4 constant b
+  : process 0; for b * next ;
+  : input 3 for
+      skip @ !if
+        key command tonum r 1- process
+      then
+    next ;
 ---reveal---
-
-: chorder
-  repeat
-    key tonum 4 * 4 *
-    key tonum 4 *
-    key tonum
-    + + . cr
-  again ;
+  : chorder
+    repeat
+      input
+      + + offset @ +
+      skip @ if
+        drop
+        skip off
+      else
+        . cr
+      then
+    again ;
 }}
 chorder
