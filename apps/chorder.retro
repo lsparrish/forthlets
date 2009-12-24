@@ -35,7 +35,8 @@
     dup char: u =if 0 offset ! drop defkey ;then
     dup char: h =if 64 offset ! drop defkey ;then
     dup char: n =if 8 emit drop defkey ;then
-    dup char: x =if drop 0 skip on ;then
+    dup char: , =if drop defkey command ;then
+    dup char: c =if pop drop pop drop ;then
   ;
 
   : tonum   ( k-n )
@@ -43,23 +44,19 @@
       r 1- list + @ over =if drop pop 1- ;then
     next ;
 
-  : show-char ( n-" )
-    dup 32  <if drop ;then
-    dup 128 >if drop ;then
-    emit ;
 ---reveal---
+  : safer-emit ( n-" )
+    dup 32  <if . cr ;then
+    dup 128 >if . cr ;then
+    default: emit ;
+  : ckey
+    defkey command tonum
+    defkey tonum 8 * +
+    offset @ + ;
   : chorder
     repeat
-      defkey command tonum 8 *
-      defkey command tonum +
-      offset @ +
+      ckey
       dup . cr
-      show-char cr
+      safer-emit cr
     again ;
-  : ckey
-    defkey command tonum 8 *
-    defkey command tonum +
-    offset @ + ;
 }}
-' ckey is key
-
