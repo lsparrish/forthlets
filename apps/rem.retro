@@ -24,8 +24,10 @@
 variable rem:l  ( line   )
 variable rem:c  ( column )
 
+stub rem.input
 stub rem.display
-
+stub rem.key
+stub rem.write
 {{
   ( Display block, with cursor )
   : pos  ( -cl)  rem:c @ rem:l @ ;
@@ -53,21 +55,23 @@ stub rem.display
 
   : input ( - )
     repeat
-      key
+      rem.key
       dup 27 <> 0; drop
       dup  8 =if drop rem:c -- rem.display [ over 8 , , ] then
-      dup 10 =if drop rem:l ++ else pos get ! rem:c ++ then
+      dup 10 =if drop rem:l ++ else pos get rem.write rem:c ++ then
       rem.display
-    again
-  ;
+    again ;
   : ws    (  -  ) whitespace dup off @ later whitespace ! ;
   : match ( c-  ) s" $$_" dup push 2 + ! pop find if d->xt @ execute else drop then ;
-  : edit? ( c-c ) dup 27 =if ws input drop then ;
+  here ] ws input ; is rem.input
+  : edit? ( c-c ) dup 27 =if rem.input drop then ;
   here ] dup 9 =if drop 27 then ; is (remap-keys)
   here ] bounds display ; is rem.display
-  
+  here ] key ; is rem.key
+  here ] ! ; is rem.write
+
 ---reveal---
-  : edit  ( - ) repeat rem.display key edit? match again ;
+  : edit  ( - ) repeat rem.display rem.key edit? match again ;
   : $$i rem:l -- ;             ( i = up     )
   : $$j rem:c -- ;             ( j = left   )
   : $$k rem:l ++ ;             ( k = down   )
@@ -82,6 +86,7 @@ stub rem.display
   : $$n blk ++ ;               ( n = next block )
   : $$z pop pop 2drop ;        ( z = exit REM )
   : $$e pop pop 2drop e ;      ( e = evaluate block )
+  : rem.in ws input ;
 }}
 
 
@@ -160,7 +165,7 @@ stub rem.display
   ( Hook for tail movement keys )
   : tail-keys ( - )
     repeat
-      key
+      rem.key
       dup char: i =if m:tail-up then
       dup char: k =if m:tail-dn then
       dup char: x =if drop     ;then
@@ -171,7 +176,7 @@ stub rem.display
   ( Hook for head movement keys )
   : head-keys ( - )
     repeat
-      key
+      rem.key
       dup char: i =if m:head-up then
       dup char: k =if m:head-dn then
       dup char: x =if drop     ;then
@@ -182,7 +187,7 @@ stub rem.display
   ( Hook for key sequences beginning with x. )
   : x-keys ( - )
     repeat
-      key
+      rem.key
       dup char: l =if c:end-rec then
       dup char: j =if c:end-sen then
       dup char: i =if l:hom-swp then
