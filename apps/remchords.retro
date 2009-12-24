@@ -46,8 +46,7 @@
 
 ---reveal---
   : safer-emit ( n-" )
-    dup 32  <if . cr ;then
-    dup 128 >if . cr ;then
+    dup 32 128 within if . cr ;then
     default: emit ;
   : chorder.ckey
     defkey command tonum
