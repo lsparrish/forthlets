@@ -52,7 +52,7 @@
   : chorder.emit  ( n-" )
     chorder.filter if def.emit ;then drop ;
   : chorder.write ( n- )
-    chorder.filter if ! ;then 2drop ;
+    swap chorder.filter if swap ! ;then 2drop ;
   : chorder.key   ( "-n )
     def.key command tonum
     def.key tonum 8 * +
