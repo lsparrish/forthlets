@@ -32,8 +32,9 @@
   variable offset
   : command ( c-c )
     dup char: z =if pop drop bye ;then
-    dup char: u =if 0 offset ! drop key ;then
-    dup char: h =if 64 offset ! drop key ;then
+    dup char: u =if 0 offset ! drop defkey ;then
+    dup char: h =if 64 offset ! drop defkey ;then
+    dup char: n =if 8 emit drop defkey ;then
     dup char: x =if drop 0 skip on ;then
   ;
 
@@ -49,13 +50,16 @@
 ---reveal---
   : chorder
     repeat
-      key command tonum 8 *
-      key command tonum +
-      dup temp !
+      defkey command tonum 8 *
+      defkey command tonum +
       offset @ +
       dup . cr
       show-char cr
     again ;
+  : ckey
+    defkey command tonum 8 *
+    defkey command tonum +
+    offset @ + ;
 }}
+' ckey is key
 
-chorder
