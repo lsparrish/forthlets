@@ -25,46 +25,37 @@
   : default: ' 2 + compile ; compile-only
   : defkey default: key ;
 
-  : ^ ( nc- ) , 1+ ;
-
-  variable len 0
-  create list
-  key j ^ ( 0 )
-  key i ^ ( 1 )
-  key o ^ ( 2 )
-  key ; ^ ( 3 )
-  len !
+  : list s" jiopmkl;" ;
+  : len list getLength ;
 
   variable skip
   variable offset
   : command ( c-c )
     dup char: z =if pop drop bye ;then
-    dup char: l =if drop char: x 64 offset +! then
-    dup char: k =if drop char: x 64 offset -! then
+    dup char: u =if 0 offset ! drop key ;then
+    dup char: h =if 64 offset ! drop key ;then
     dup char: x =if drop 0 skip on ;then
   ;
 
   : tonum   ( k-n )
-    len @ for
+    len for
       r 1- list + @ over =if drop pop 1- ;then
     next ;
-  4 constant b
-  : process 0; for b * next ;
-  : input 3 for
-      skip @ !if
-        key command tonum r 1- process
-      then
-    next ;
+
+  : show-char ( n-" )
+    dup 32  <if drop ;then
+    dup 128 >if drop ;then
+    emit ;
 ---reveal---
   : chorder
     repeat
-      input
-      + + offset @ +
-      skip @ if
-        drop
-        skip off
-      else
-        . cr
-      then
+      key command tonum 8 *
+      key command tonum +
+      dup temp !
+      offset @ +
+      dup . cr
+      show-char cr
     again ;
 }}
+
+chorder
