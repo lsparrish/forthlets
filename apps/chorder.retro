@@ -26,21 +26,21 @@
   : def.key  default: key ;
   : def.emit default: emit ;
 
-  : list s" jiopmkl;" ;
-  : len list getLength ;
+  : chorder.list s" jiopmkl;" ;
+  : chorder.len chorder.list getLength ;
 
-  variable skip
-  variable offset
+  variable chorder:offset
   : command ( c-c )
     dup char: z =if pop drop bye ;then
-    dup char: u =if 0 offset ! drop def.key ;then
-    dup char: h =if 64 offset ! drop def.key ;then
-(    dup char: c =if pop drop pop drop ;then )
+    dup char: u =if 0 chorder:offset ! drop def.key ;then
+    dup char: h =if 64 chorder:offset ! drop def.key ;then
+    dup char: c =if rem:ins off
+      ['] rem.key :devector ['] rem.write :devector ;then
   ;
 
   : tonum   ( k-n )
-    len for
-      r 1- list + @ over =if drop pop 1- ;then
+    chorder.len for
+      r 1- chorder.list + @ over =if drop pop 1- ;then
     next ;
 
 ---reveal---
@@ -54,9 +54,9 @@
   : chorder.write ( n- )
     swap chorder.filter if swap ! ;then 2drop ;
   : chorder.key   ( "-n )
-    def.key command tonum
-    def.key tonum 8 * +
-    offset @ + ;
+    def.key command dup tonum
+    def.key tonum 8 *
+    chorder:offset @ + +  ;
   : chorder
     repeat
       chorder.key
@@ -65,6 +65,6 @@
     again ;
 }}
 : $$c
-  ['] chorder.key ['] rem.key :is
+  ['] chorder.key   ['] rem.key :is
   ['] chorder.write ['] rem.write :is
   rem.in ;
