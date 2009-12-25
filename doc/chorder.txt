@@ -3,7 +3,7 @@ Navigation and Editing
 
 ======  ==========
 choord  value
-------  ----------
+======  ==========
 wa      backspace
 we      enter
 h       uppercase
@@ -16,7 +16,7 @@ Lowercase Mode
 
 ======  =====
 choord  value
-------  -----
+======  =====
 ;;      ?
 ;o      >
 ;i      =
@@ -35,10 +35,10 @@ ow      1
 oa      0
 i;      /
 io      .
-ii      -
+ii      \-
 ij      ,
-if      +
-ie      *
+if      \+
+ie      \*
 iw      )
 ia      (
 j;      '
@@ -57,11 +57,11 @@ Uppercase Mode
 
 ======  =====
 choord  value
-------  -----
+======  =====
 ;;      space
 ;o      ~
 ;i      }
-;j      |
+;j      ``|``
 ;f      {
 ;e      z
 ;w      y
@@ -89,11 +89,11 @@ jj      d
 jf      c
 je      b
 jw      a
-ja      `
+ja      \`
 f;      _
 fo      ^
 fi      ]
-fj      \
+fj      \\
 ff      [
 fe      Z
 fw      Y
