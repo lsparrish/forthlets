@@ -23,11 +23,13 @@
 
 variable rem:l  ( line   )
 variable rem:c  ( column )
+variable rem:ins
 
-stub rem.input
 stub rem.display
-stub rem.key
-stub rem.write
+stub rem.in
+: rem.key key ;
+: rem.write ! ;
+
 {{
   ( Display block, with cursor )
   : pos  ( -cl)  rem:c @ rem:l @ ;
@@ -55,6 +57,7 @@ stub rem.write
 
   : input ( - )
     repeat
+      rem:ins @ 0; drop
       rem.key
       dup 27 <> 0; drop
       dup  8 =if drop rem:c -- rem.display [ over 8 , , ] then
@@ -63,12 +66,10 @@ stub rem.write
     again ;
   : ws    (  -  ) whitespace dup off @ later whitespace ! ;
   : match ( c-  ) s" $$_" dup push 2 + ! pop find if d->xt @ execute else drop then ;
-  here ] ws input ; is rem.input
-  : edit? ( c-c ) dup 27 =if rem.input drop then ;
+  : edit? ( c-c ) dup 27 =if rem.in drop then ;
   here ] dup 9 =if drop 27 then ; is (remap-keys)
   here ] bounds display ; is rem.display
-  here ] key ; is rem.key
-  here ] ! ; is rem.write
+  here ] rem:ins on ws input ; is rem.in
 
 ---reveal---
   : edit  ( - ) repeat rem.display rem.key edit? match again ;
@@ -86,7 +87,6 @@ stub rem.write
   : $$n blk ++ ;               ( n = next block )
   : $$z pop pop 2drop ;        ( z = exit REM )
   : $$e pop pop 2drop e ;      ( e = evaluate block )
-  : rem.in ws input ;
 }}
 
 
