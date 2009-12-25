@@ -1,65 +1,4 @@
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
-( Chord Keyboard ["chorder"]                                )
-( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
-( Distributed under the Creative Commons Zero License:      )
-(                                                           )
-( The person who associated a work with this document has   )
-( dedicated this work to the Commons by waiving all of his  )
-( or her rights to the work under copyright law and all     )
-( related or neighboring legal rights he or she had in the  )
-( work, to the extent allowable by law.                     )
-(                                                           )
-( Other Rights — In no way are any of the following rights  )
-( affected by CC0:                                          )
-(  * Patent or trademark rights held by the person who      )
-(    associated this document with a work.                  )
-(  * Rights other persons may have either in the work       )
-(    itself or in how the work is used, such as publicity   )
-(    or privacy rights.                                     )
-(                                                           )
-( Charles Childers, December 2009                           )
-( Luke Parrish, December 2009                               )
-( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
-
-{{
-  : default: ' 2 + compile ; compile-only
-  : defkey default: key ;
-
-  : list s" jiopmkl;" ;
-  : len list getLength ;
-
-  variable skip
-  variable offset
-  : command ( c-c )
-    dup char: z =if pop drop bye ;then
-    dup char: u =if 0 offset ! drop defkey ;then
-    dup char: h =if 64 offset ! drop defkey ;then
-    dup char: n =if 8 emit drop defkey ;then
-    dup char: , =if drop defkey command ;then
-    dup char: c =if pop drop pop drop ;then
-  ;
-
-  : tonum   ( k-n )
-    len for
-      r 1- list + @ over =if drop pop 1- ;then
-    next ;
-
----reveal---
-  : safer-emit ( n-" )
-    dup 32 128 within if . cr ;then
-    default: emit ;
-  : chorder.ckey
-    defkey command tonum
-    defkey tonum 8 * +
-    offset @ + ;
-  : chorder
-    repeat
-      chorder.ckey
-      dup . cr
-      safer-emit cr
-    again ;
-}}
-( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
 ( Retro Editor for Mortals ["rem"]                          )
 ( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
 ( Distributed under the Creative Commons Zero License:      )
@@ -84,8 +23,12 @@
 
 variable rem:l  ( line   )
 variable rem:c  ( column )
+variable rem:ins
 
 stub rem.display
+stub rem.in
+: rem.key key ;
+: rem.write ! ;
 
 {{
   ( Display block, with cursor )
@@ -114,21 +57,22 @@ stub rem.display
 
   : input ( - )
     repeat
-      chorder.ckey
+      rem:ins @ 0; drop
+      rem.key
       dup 27 <> 0; drop
       dup  8 =if drop rem:c -- rem.display [ over 8 , , ] then
-      dup 10 =if drop rem:l ++ else pos get ! rem:c ++ then
+      dup 10 =if drop rem:l ++ else pos get rem.write rem:c ++ then
       rem.display
-    again
-  ;
+    again ;
   : ws    (  -  ) whitespace dup off @ later whitespace ! ;
   : match ( c-  ) s" $$_" dup push 2 + ! pop find if d->xt @ execute else drop then ;
-  : edit? ( c-c ) dup 27 =if ws input drop then ;
+  : edit? ( c-c ) dup 27 =if rem.in drop then ;
   here ] dup 9 =if drop 27 then ; is (remap-keys)
   here ] bounds display ; is rem.display
-  
+  here ] rem:ins on ws input ; is rem.in
+
 ---reveal---
-  : edit  ( - ) repeat rem.display key edit? match again ;
+  : edit  ( - ) repeat rem.display rem.key edit? match again ;
   : $$i rem:l -- ;             ( i = up     )
   : $$j rem:c -- ;             ( j = left   )
   : $$k rem:l ++ ;             ( k = down   )
@@ -221,7 +165,7 @@ stub rem.display
   ( Hook for tail movement keys )
   : tail-keys ( - )
     repeat
-      key
+      rem.key
       dup char: i =if m:tail-up then
       dup char: k =if m:tail-dn then
       dup char: x =if drop     ;then
@@ -232,7 +176,7 @@ stub rem.display
   ( Hook for head movement keys )
   : head-keys ( - )
     repeat
-      key
+      rem.key
       dup char: i =if m:head-up then
       dup char: k =if m:head-dn then
       dup char: x =if drop     ;then
@@ -243,7 +187,7 @@ stub rem.display
   ( Hook for key sequences beginning with x. )
   : x-keys ( - )
     repeat
-      key
+      rem.key
       dup char: l =if c:end-rec then
       dup char: j =if c:end-sen then
       dup char: i =if l:hom-swp then
@@ -259,3 +203,75 @@ stub rem.display
 ---reveal---
   : $$x x-keys ;               ( x = x-keys )
 }}
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Chord Keyboard ["chorder"]                                )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+( Distributed under the Creative Commons Zero License:      )
+(                                                           )
+( The person who associated a work with this document has   )
+( dedicated this work to the Commons by waiving all of his  )
+( or her rights to the work under copyright law and all     )
+( related or neighboring legal rights he or she had in the  )
+( work, to the extent allowable by law.                     )
+(                                                           )
+( Other Rights — In no way are any of the following rights  )
+( affected by CC0:                                          )
+(  * Patent or trademark rights held by the person who      )
+(    associated this document with a work.                  )
+(  * Rights other persons may have either in the work       )
+(    itself or in how the work is used, such as publicity   )
+(    or privacy rights.                                     )
+(                                                           )
+( Charles Childers, December 2009                           )
+( Luke Parrish, December 2009                               )
+( ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ )
+
+{{
+  : default: ' 2 + compile ; compile-only
+  : def.key  ( "- ) default: key ;
+  : def.emit ( -" )  default: emit ;
+
+  : chorder.list ( -a ) s" awefjio;" ;
+  : chorder.len  ( -n ) chorder.list getLength ;
+
+  variable chorder:lastkey
+  variable chorder:offset
+  : command ( c-c )
+    dup char: z =if pop drop bye ;then
+    dup char: u =if 0 chorder:offset ! drop def.key ;then
+    dup char: h =if 64 chorder:offset ! drop def.key ;then
+    dup char: q =if rem:ins off
+      ['] rem.key :devector ['] rem.write :devector ;then
+  ;
+
+  : tonum   ( k-n )
+    chorder.len for
+      r 1- chorder.list + @ over =if drop pop 1- ;then
+    next ;
+
+---reveal---
+  : chorder.filter ( n-nf )
+    dup 8   =if TRUE ;then
+    dup 10  =if TRUE ;then
+    dup 31 128 within if TRUE ;then
+    FALSE ;
+  : chorder.emit  ( n-" )
+    chorder.filter if def.emit ;then drop ;
+  : chorder.write ( n- )
+    swap chorder.filter if swap ! ;then 2drop ;
+
+  : chorder.key   ( "-n )
+    def.key command tonum 8 *
+    def.key command tonum
+    chorder:offset @ + +  ;
+  : chorder
+    repeat
+      chorder.key
+      dup . cr
+      chorder.emit cr
+    again ;
+}}
+: $$q
+  ['] chorder.key   ['] rem.key :is
+  ['] chorder.write ['] rem.write :is
+  rem.in ;
