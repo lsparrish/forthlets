@@ -56,8 +56,8 @@
     swap chorder.filter if swap ! ;then 2drop ;
 
   : chorder.key   ( "-n )
-    def.key command tonum
     def.key command tonum 8 *
+    def.key command tonum
     chorder:offset @ + +  ;
   : chorder
     repeat
