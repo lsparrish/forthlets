@@ -57,7 +57,7 @@
 
   : chorder.key   ( "-n )
     def.key command tonum
-    def.key tonum 8 *
+    def.key command tonum 8 *
     chorder:offset @ + +  ;
   : chorder
     repeat
