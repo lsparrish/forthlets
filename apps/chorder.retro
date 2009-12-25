@@ -23,18 +23,19 @@
 
 {{
   : default: ' 2 + compile ; compile-only
-  : def.key  default: key ;
-  : def.emit default: emit ;
+  : def.key  ( "- ) default: key ;
+  : def.emit ( -" )  default: emit ;
 
-  : chorder.list s" jiopmkl;" ;
-  : chorder.len chorder.list getLength ;
+  : chorder.list ( -a ) s" awefjio;" ;
+  : chorder.len  ( -n ) chorder.list getLength ;
 
+  variable chorder:lastkey
   variable chorder:offset
   : command ( c-c )
     dup char: z =if pop drop bye ;then
     dup char: u =if 0 chorder:offset ! drop def.key ;then
     dup char: h =if 64 chorder:offset ! drop def.key ;then
-    dup char: c =if rem:ins off
+    dup char: q =if rem:ins off
       ['] rem.key :devector ['] rem.write :devector ;then
   ;
 
@@ -53,8 +54,9 @@
     chorder.filter if def.emit ;then drop ;
   : chorder.write ( n- )
     swap chorder.filter if swap ! ;then 2drop ;
+
   : chorder.key   ( "-n )
-    def.key command dup tonum
+    def.key command tonum
     def.key tonum 8 *
     chorder:offset @ + +  ;
   : chorder
@@ -64,7 +66,8 @@
       chorder.emit cr
     again ;
 }}
-: $$c
+: $$q
   ['] chorder.key   ['] rem.key :is
   ['] chorder.write ['] rem.write :is
   rem.in ;
+chorder
